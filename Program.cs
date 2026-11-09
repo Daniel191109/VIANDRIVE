@@ -24,10 +24,8 @@ builder.Services.AddScoped<FirebaseService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<RegistroPagoService>();
 builder.Services.AddScoped<INotificacionService, NotificacionService>();
-// Registro correcto del servicio de contactos
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<ICorreoService, CorreoService>();
-// ✅ Registro del repositorio de solicitudes
 builder.Services.AddScoped<ISolicitudRepository, SolicitudRepository>();
 
 builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
@@ -41,7 +39,7 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-        Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
 
@@ -51,11 +49,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+// Habilitar Swagger en cualquier entorno (incluido Producción) para poder probar la API
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "VIANDRIVE API v1");
+    c.RoutePrefix = string.Empty; // Hace que Swagger abra directamente en la raíz de la URL
+});
 
 if (!app.Environment.IsDevelopment())
 {
@@ -66,8 +66,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Mapeo obligatorio para que los controladores de API respondan
+app.MapControllers();
 
 app.MapControllerRoute(
     name: "default",
