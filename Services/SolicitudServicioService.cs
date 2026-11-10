@@ -1,34 +1,50 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ViandriveApp.Models;
+using VIANDRIVEFULL.Data.Repositories;
+using VIANDRIVEFULL.Models;
 
-namespace ViandriveApp.Services
+namespace VIANDRIVEFULL.Services
 {
-    public static class SolicitudService
+    public class SolicitudServicioService
     {
-        private static readonly ApiService _apiService = new ApiService();
+        private readonly ISolicitudRepository _solicitudRepository;
 
-        public static async Task<List<SolicitudViajeDTO>> ObtenerSolicitudesPendientes(int conductorId)
+        public SolicitudServicioService(ISolicitudRepository solicitudRepository)
         {
-            // Nota: Ajustado a "Pendiente" con P mayúscula para que coincida con el backend
-            var endpoint = $"api/solicitudes?estado=Pendiente&conductorId={conductorId}";
-            var solicitudes = await _apiService.GetAsync<List<SolicitudViajeDTO>>(endpoint);
-
-            return solicitudes ?? new List<SolicitudViajeDTO>();
+            _solicitudRepository = solicitudRepository;
         }
 
-        public static async Task<bool> AceptarSolicitud(int solicitudId, int conductorId)
+        public async Task<IEnumerable<SolicitudViajeDTO>> ObtenerSolicitudesPendientesAsync(int conductorId)
         {
-            // Coincide con el flujo de AceptarSolicitudAsync en tu backend
-            var endpoint = "api/solicitudes/aceptar";
-            var payload = new
+            // Lógica real de backend usando tu repositorio o base de datos
+            var solicitudes = await _solicitudRepository.ObtenerPendientesAsync(conductorId);
+            
+            // Mapeo o conversión a DTO según la estructura de tus entidades
+            var listaDto = new List<SolicitudViajeDTO>();
+            
+            if (solicitudes != null)
             {
-                id = solicitudId,
-                conductorIdParam = conductorId
-            };
+                foreach (var s in solicitudes)
+                {
+                    listaDto.Add(new SolicitudViajeDTO
+                    {
+                        ClienteId = s.ClienteId,
+                        Origen = s.Origen,
+                        Destino = s.Destino,
+                        OfertaPasajero = s.OfertaPasajero,
+                        MedioPago = s.MedioPago
+                    });
+                }
+            }
 
-            var response = await _apiService.PostAsync(endpoint, payload);
-            return response != null && response.IsSuccessStatusCode;
+            return listaDto;
+        }
+
+        public async Task<bool> AceptarSolicitudAsync(int solicitudId, int conductorId)
+        {
+            // Lógica de backend para actualizar el estado de la solicitud en la BD
+            bool resultado = await _solicitudRepository.AceptarSolicitudAsync(solicitudId, conductorId);
+            return resultado;
         }
     }
 }
