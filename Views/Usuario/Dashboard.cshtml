@@ -1,0 +1,22 @@
+﻿@model VIANDRIVEFULL.Models.UsuarioDashboardViewModel
+
+<h2 class="mt-4">Bienvenido, @Model.Nombre</h2>
+
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>ID</th>
+        <td>@Model.Id</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>@Model.Email</td>
+    </tr>
+    <tr>
+        <th>Rol</th>
+        <td>@Model.Rol</td>
+    </tr>
+</table>
+
+<div class="mt-4">
+    <a href="/Auth/Login" class="btn btn-secondary">Cerrar sesión</a>
+</div>
