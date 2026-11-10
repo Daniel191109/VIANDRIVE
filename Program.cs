@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using VIANDRIVEFULL.Data;
@@ -6,6 +8,19 @@ using VIANDRIVEFULL.Data.Repositories;
 using VIANDRIVEFULL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ==========================================
+// CONFIGURACIÓN DE LÍMITES PARA PETICIONES GRANDES (BASE64)
+// ==========================================
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 52428800; // 50 MB
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 52428800; // 50 MB
+});
 
 // Configuración de la base de datos con resiliencia y reintentos ante fallos transitorios
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
