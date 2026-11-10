@@ -10,7 +10,7 @@ using VIANDRIVEFULL.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // ==========================================
-// CONFIGURACIÓN DE LÍMITES PARA PETICIONES GRANDES (BASE64)
+// 1. CONFIGURACIÓN DE LÍMITES PARA IMÁGENES EN BASE64 (50 MB)
 // ==========================================
 builder.Services.Configure<KestrelServerOptions>(options =>
 {
@@ -22,7 +22,9 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 52428800; // 50 MB
 });
 
-// Configuración de la base de datos con resiliencia y reintentos ante fallos transitorios
+// ==========================================
+// 2. CONFIGURACIÓN DE BASE DE DATOS Y SERVICIOS
+// ==========================================
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString, sqlServerOptions =>
@@ -43,6 +45,9 @@ builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<ICorreoService, CorreoService>();
 builder.Services.AddScoped<ISolicitudRepository, SolicitudRepository>();
 
+// ==========================================
+// 3. AUTENTICACIÓN JWT
+// ==========================================
 builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -64,12 +69,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Habilitar Swagger en cualquier entorno (incluido Producción) para poder probar la API
+// ==========================================
+// 4. CONFIGURACIÓN DE MIDDLEWARES Y RUTAS
+// ==========================================
+
+// Habilitar Swagger en la ruta /swagger para pruebas limpias
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "VIANDRIVE API v1");
-    c.RoutePrefix = string.Empty; // Hace que Swagger abra directamente en la raíz de la URL
+    // Al quitar RoutePrefix = string.Empty, Swagger estará disponible en: https://tu-dominio/swagger
 });
 
 if (!app.Environment.IsDevelopment())
@@ -85,7 +94,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Mapeo obligatorio para que los controladores de API respondan
+// Mapeo de Controladores de API y Rutas MVC tradicionales
 app.MapControllers();
 
 app.MapControllerRoute(
