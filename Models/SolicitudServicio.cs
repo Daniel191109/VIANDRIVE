@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 using System;
+=======
+﻿using System;
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -56,6 +60,7 @@ namespace VIANDRIVEFULL.Models
         // PROPIEDADES DE NAVEGACIÓN (RELACIONES EF CORE)
         // ==========================================
 
+<<<<<<< HEAD
         // Relación con el pasajero registrado en la tabla Clientes.
         [ForeignKey("ClienteId")]
         public virtual Cliente? Cliente { get; set; }
@@ -67,5 +72,20 @@ namespace VIANDRIVEFULL.Models
         // Relación con el Vehículo
         [ForeignKey("VehiculoId")]
         public virtual Vehiculo? Vehiculo { get; set; }
+=======
+        // Relación con el Pasajero (Asumiendo que tu tabla de usuarios se llama 'Usuario' o 'Cliente')
+        [ForeignKey("ClienteId")]
+        public virtual Usuario Cliente { get; set; }
+        // Nota: Si tu modelo de base de datos para el cliente se llama "Cliente" en vez de "Usuario", 
+        // cambia la palabra "Usuario" por "Cliente" en la línea de arriba.
+
+        // Relación con el Conductor
+        [ForeignKey("ConductorId")]
+        public virtual Conductor Conductor { get; set; }
+
+        // Relación con el Vehículo
+        [ForeignKey("VehiculoId")]
+        public virtual Vehiculo Vehiculo { get; set; }
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
     }
 }

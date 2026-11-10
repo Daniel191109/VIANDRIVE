@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 using FirebaseAdmin;
+=======
+﻿using FirebaseAdmin;
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using System.IO;
@@ -14,8 +18,11 @@ namespace VIANDRIVEFULL.Services
     public class FirebaseService
     {
         private static bool _initialized = false;
+<<<<<<< HEAD
         private static readonly object InitializationLock = new();
         private readonly bool _firebaseAvailable;
+=======
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
         private readonly ILogger<FirebaseService> _logger;
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -26,6 +33,7 @@ namespace VIANDRIVEFULL.Services
             _config = config;
             _httpContextAccessor = httpContextAccessor;
 
+<<<<<<< HEAD
             var configuredPath = _config["Firebase:CredentialsPath"];
             var path = string.IsNullOrWhiteSpace(configuredPath)
                 ? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Services", "firebase-key.json")
@@ -53,12 +61,31 @@ namespace VIANDRIVEFULL.Services
                 }
             }
             _firebaseAvailable = _initialized;
+=======
+            if (!_initialized)
+            {
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Services", "firebase-key.json");
+
+                if (!File.Exists(path))
+                {
+                    _logger.LogError($"Archivo firebase-key.json no encontrado en: {path}");
+                    throw new FileNotFoundException("No se encontró el archivo firebase-key.json en: " + path);
+                }
+
+                var credential = GoogleCredential.FromFile(path);
+                FirebaseApp.Create(new AppOptions { Credential = credential });
+
+                _initialized = true;
+                _logger.LogInformation("FirebaseApp inicializado correctamente.");
+            }
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
         }
 
         public async Task<string> EnviarNotificacionAsync(string token, string titulo, string cuerpo, int conductorId, string placa)
         {
             string resultado;
 
+<<<<<<< HEAD
             if (!_firebaseAvailable)
                 return "Firebase no está configurado en el servidor.";
 
@@ -66,6 +93,12 @@ namespace VIANDRIVEFULL.Services
             {
                 resultado = "Token inválido. Notificación no enviada.";
                 _logger.LogWarning("Token push inválido. Notificación omitida.");
+=======
+            if (string.IsNullOrWhiteSpace(token) || token.Length < 100 || !token.StartsWith("e"))
+            {
+                resultado = "Token inválido. Notificación no enviada.";
+                _logger.LogWarning($"Token inválido. Notificación omitida. Token recibido: '{token}'");
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                 await RegistrarLogNotificacionAsync(conductorId, placa, token, resultado);
                 return resultado;
             }
@@ -91,7 +124,11 @@ namespace VIANDRIVEFULL.Services
             catch (FirebaseMessagingException ex)
             {
                 resultado = $"Error al enviar notificación: {ex.Message}";
+<<<<<<< HEAD
                 _logger.LogError(ex, "Error al enviar notificación Firebase.");
+=======
+                _logger.LogError($"Error al enviar notificación Firebase. Token: '{token}'. Error: {ex.Message}");
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                 await RegistrarLogNotificacionAsync(conductorId, placa, token, resultado);
                 return resultado;
             }

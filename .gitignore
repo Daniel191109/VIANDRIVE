@@ -1,8 +1,14 @@
 bin/
 obj/
 .vs/
+<<<<<<< HEAD
 *.user
 *.suo
 appsettings.Local.json
 appsettings.*.Local.json
 Services/firebase-key.json
+=======
+**/firebase-key.json
+*.json
+!appsettings*.json
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72

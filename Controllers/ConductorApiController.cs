@@ -13,7 +13,10 @@ namespace VIANDRIVEFULL.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+<<<<<<< HEAD
     [Route("api/conductores")]
+=======
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
     public class ConductorApiController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -23,6 +26,7 @@ namespace VIANDRIVEFULL.Controllers
             _context = context;
         }
 
+<<<<<<< HEAD
         [HttpGet("activos")]
         public async Task<IActionResult> ObtenerConductoresActivos()
         {
@@ -75,6 +79,8 @@ namespace VIANDRIVEFULL.Controllers
             return Ok(new { mensaje = "Ubicación actualizada correctamente." });
         }
 
+=======
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPerfilConductor(int id)
         {
@@ -121,9 +127,14 @@ namespace VIANDRIVEFULL.Controllers
             if (documentoExiste)
                 return Conflict(new { error = "Ya existe un conductor registrado con este número de documento." });
 
+<<<<<<< HEAD
             var correoNormalizado = dto.Email?.Trim().ToLowerInvariant();
             var emailExiste = _context.Clientes.Any(c => c.Correo.ToLower() == correoNormalizado) ||
                               _context.Conductores.Any(c => c.Email != null && c.Email.ToLower() == correoNormalizado);
+=======
+            var emailExiste = _context.Usuarios.Any(u => u.Email == dto.Email) ||
+                              _context.Conductores.Any(c => c.Email == dto.Email);
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
             if (emailExiste)
                 return Conflict(new { error = "Ya existe una cuenta registrada con este correo electrónico." });
 
@@ -133,7 +144,11 @@ namespace VIANDRIVEFULL.Controllers
                 Documento = dto.Document,
                 Telefono = dto.Phone,
                 Edad = dto.Age,
+<<<<<<< HEAD
                 Email = correoNormalizado,
+=======
+                Email = dto.Email,
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                 TipoLicencia = dto.LicenseType,
                 NumeroLicencia = dto.LicenseNumber,
                 Placa = dto.Plate,

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 using System;
+=======
+﻿using System;
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +47,11 @@ namespace VIANDRIVEFULL.Controllers
             {
                 id = solicitud.Id,
                 clienteId = solicitud.ClienteId,
+<<<<<<< HEAD
                 nombrePasajero = solicitud.Cliente != null ? solicitud.Cliente.NombreCompleto : "Pasajero Viandrive",
+=======
+                nombrePasajero = solicitud.Cliente != null ? solicitud.Cliente.Nombre : "Pasajero Viandrive",
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                 conductorId = solicitud.ConductorId,
                 nombreConductor = solicitud.Conductor != null ? solicitud.Conductor.Nombre : "Conductor Asignado",
                 vehiculoId = solicitud.VehiculoId, // <--- ID del vehículo incluido
@@ -85,7 +93,10 @@ namespace VIANDRIVEFULL.Controllers
             var ahora = DateTime.Now;
 
             var pendientes = await _context.SolicitudesServicio
+<<<<<<< HEAD
                 .Include(s => s.Cliente)
+=======
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                 .Where(s => s.Estado == "Pendiente" || s.Estado == "ConPostulaciones")
                 .ToListAsync();
 
@@ -111,7 +122,11 @@ namespace VIANDRIVEFULL.Controllers
                 .Select(s => new
                 {
                     id = s.Id,
+<<<<<<< HEAD
                     nombrePasajero = s.Cliente != null ? s.Cliente.NombreCompleto : "Pasajero Viandrive",
+=======
+                    nombrePasajero = "Pasajero Viandrive",
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                     origen = s.Origen,
                     destino = s.Destino,
                     oferta = s.OfertaPasajero > 0 ? s.OfertaPasajero : s.PrecioSugerido,
@@ -131,6 +146,7 @@ namespace VIANDRIVEFULL.Controllers
             if (dto == null || string.IsNullOrWhiteSpace(dto.Destino))
                 return BadRequest("Datos inválidos.");
 
+<<<<<<< HEAD
             if (dto.UsuarioId <= 0)
                 return BadRequest(new { mensaje = "UsuarioId debe contener el Id real del cliente." });
 
@@ -159,6 +175,12 @@ namespace VIANDRIVEFULL.Controllers
             {
                 return BadRequest(new { mensaje = ex.Message });
             }
+=======
+            var resultado = await _repository.Registrar(dto);
+            if (resultado) return Ok(new { mensaje = "Solicitud registrada correctamente." });
+
+            return StatusCode(500, "Error al registrar la solicitud.");
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
         }
 
         [HttpPost]
@@ -167,6 +189,7 @@ namespace VIANDRIVEFULL.Controllers
             if (dto == null) return BadRequest(new { mensaje = "Los datos de la solicitud no son válidos." });
 
             var usuario = User.Identity?.Name ?? "Sistema";
+<<<<<<< HEAD
             SolicitudServicio solicitud;
             try
             {
@@ -180,6 +203,9 @@ namespace VIANDRIVEFULL.Controllers
             {
                 return BadRequest(new { mensaje = ex.Message });
             }
+=======
+            var solicitud = await _service.CrearSolicitudAsync(dto, usuario);
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
 
             return Ok(new
             {
@@ -206,6 +232,7 @@ namespace VIANDRIVEFULL.Controllers
         }
 
         [HttpPut("{id}/aceptar")]
+<<<<<<< HEAD
         public async Task<IActionResult> Aceptar(int id, [FromQuery] int conductorId, [FromQuery] double lat = 0, [FromQuery] double lng = 0)
         {
             if (conductorId <= 0)
@@ -213,6 +240,12 @@ namespace VIANDRIVEFULL.Controllers
 
             var resultado = await _service.AceptarSolicitudAsync(id, conductorId, lat, lng);
             if (!resultado.Exito) return BadRequest(new { mensaje = resultado.Mensaje });
+=======
+        public async Task<IActionResult> Aceptar(int id)
+        {
+            var resultado = await _service.AceptarSolicitudAsync(id);
+            if (!resultado.Exito) return NotFound(new { mensaje = resultado.Mensaje });
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
 
             return Ok(new { mensaje = "Solicitud aceptada correctamente.", solicitud = new { id = resultado.Solicitud.Id, estado = resultado.Solicitud.Estado } });
         }
@@ -237,7 +270,11 @@ namespace VIANDRIVEFULL.Controllers
 
             if (dto.EsContraoferta)
             {
+<<<<<<< HEAD
                 var resultado = await _service.RegistrarContraofertaAsync(dto.SolicitudId, dto.TarifaOfrecida, usuario, dto.LatConductor, dto.LngConductor, dto.ConductorId);
+=======
+                var resultado = await _service.RegistrarContraofertaAsync(dto.SolicitudId, dto.TarifaOfrecida, usuario, dto.LatConductor, dto.LngConductor);
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                 if (!resultado.Exito) return BadRequest(new { mensaje = resultado.Mensaje });
 
                 return Ok(new { mensaje = "Contraoferta registrada.", solicitud = new { id = resultado.Solicitud.Id, estado = resultado.Solicitud.Estado } });

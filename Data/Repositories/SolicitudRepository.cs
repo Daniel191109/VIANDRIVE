@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 using System;
+=======
+﻿using System;
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -67,11 +71,19 @@ namespace VIANDRIVEFULL.Data.Repositories
             // 🚗 Mapeo de Relaciones
             if (TieneColumna(reader, "ClienteNombre") && !reader.IsDBNull(reader.GetOrdinal("ClienteNombre")))
             {
+<<<<<<< HEAD
                 s.Cliente = new Cliente { NombreCompleto = reader.GetString(reader.GetOrdinal("ClienteNombre")) };
+=======
+                s.Cliente = new Usuario { Nombre = reader.GetString(reader.GetOrdinal("ClienteNombre")) };
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
             }
 
             if (TieneColumna(reader, "ConductorNombre") && !reader.IsDBNull(reader.GetOrdinal("ConductorNombre")))
             {
+<<<<<<< HEAD
+=======
+                // Cambiado de new Usuario a new Conductor para que coincida con el modelo
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                 s.Conductor = new Conductor { Nombre = reader.GetString(reader.GetOrdinal("ConductorNombre")) };
             }
 
@@ -92,6 +104,7 @@ namespace VIANDRIVEFULL.Data.Repositories
         {
             try
             {
+<<<<<<< HEAD
                 if (dto.UsuarioId <= 0)
                     throw new ArgumentException("UsuarioId debe contener el Id real del cliente.", nameof(dto));
 
@@ -101,11 +114,21 @@ namespace VIANDRIVEFULL.Data.Repositories
                             (ClienteId, ConductorId, VehiculoId, Origen, Destino, LatOrigen, LngOrigen, LatDestino, LngDestino, FechaSolicitud, Estado, PrecioSugerido, OfertaPasajero, MedioPago, PagoConfirmado, OfertaAceptada, OfertaRechazada)
                             VALUES
                             (@ClienteId, NULL, NULL, @Origen, @Destino, @LatOrigen, @LngOrigen, @LatDestino, @LngDestino, GETDATE(), 'Pendiente', @OfertaPasajero, @OfertaPasajero, 'Efectivo', 0, 0, 0)";
+=======
+                var query = @"INSERT INTO SolicitudesServicio 
+                            (ClienteId, ConductorId, VehiculoId, Origen, Destino, LatOrigen, LngOrigen, LatDestino, LngDestino, FechaSolicitud, Estado, PrecioSugerido, OfertaPasajero, MedioPago, PagoConfirmado, OfertaAceptada, OfertaRechazada)
+                            VALUES 
+                            (@ClienteId, 0, 0, @Origen, @Destino, @LatOrigen, @LngOrigen, @LatDestino, @LngDestino, GETDATE(), 'Pendiente', @OfertaPasajero, @OfertaPasajero, 'Efectivo', 0, 0, 0)";
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
 
                 using var conexion = new SqlConnection(_connectionString);
                 using var cmd = new SqlCommand(query, conexion);
 
+<<<<<<< HEAD
                 cmd.Parameters.AddWithValue("@ClienteId", dto.UsuarioId);
+=======
+                cmd.Parameters.AddWithValue("@ClienteId", dto.UsuarioId > 0 ? dto.UsuarioId : 1);
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                 cmd.Parameters.AddWithValue("@Origen", string.IsNullOrWhiteSpace(dto.Origen) ? "Ubicación cliente" : dto.Origen);
                 cmd.Parameters.AddWithValue("@Destino", string.IsNullOrWhiteSpace(dto.Destino) ? "Destino cliente" : dto.Destino);
                 cmd.Parameters.AddWithValue("@LatOrigen", dto.LatOrigen);
@@ -146,6 +169,7 @@ namespace VIANDRIVEFULL.Data.Repositories
             return solicitudes;
         }
 
+<<<<<<< HEAD
         // 👇 MÉTODOS AÑADIDOS PARA CUMPLIR CON LA INTERFAZ ISolicitudRepository
         public async Task<List<SolicitudServicio>> ObtenerPendientesAsync(int conductorId)
         {
@@ -184,13 +208,25 @@ namespace VIANDRIVEFULL.Data.Repositories
         {
             var query = @"SELECT s.*, 
                                 c.NombreCompleto AS ClienteNombre,
+=======
+        public async Task<SolicitudServicio> ObtenerPorIdAsync(int id)
+        {
+            // 🔍 Consulta con LEFT JOIN para traer de forma segura el Cliente, Conductor y el Vehículo
+            var query = @"SELECT s.*, 
+                                c.Nombre AS ClienteNombre, 
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                                 cond.Nombre AS ConductorNombre, 
                                 v.Marca AS VehiculoMarca, 
                                 v.Modelo AS VehiculoModelo, 
                                 v.Placa AS VehiculoPlaca
                           FROM SolicitudesServicio s
+<<<<<<< HEAD
                           LEFT JOIN Clientes c ON s.ClienteId = c.Id
                           LEFT JOIN Conductores cond ON s.ConductorId = cond.Id
+=======
+                          LEFT JOIN Usuarios c ON s.ClienteId = c.Id
+                          LEFT JOIN Usuarios cond ON s.ConductorId = cond.Id
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
                           LEFT JOIN Vehiculos v ON s.VehiculoId = v.Id
                           WHERE s.Id = @Id";
 

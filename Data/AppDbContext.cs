@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 using Microsoft.EntityFrameworkCore;
+=======
+﻿using Microsoft.EntityFrameworkCore;
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
 using VIANDRIVEFULL.Models;
 
 namespace VIANDRIVEFULL.Data
@@ -38,6 +42,7 @@ namespace VIANDRIVEFULL.Data
             modelBuilder.Entity<SolicitudServicio>()
                 .ToTable("SolicitudesServicio");
 
+<<<<<<< HEAD
             // Las solicitudes deben apuntar a los registros reales de cada tabla del dominio.
             modelBuilder.Entity<SolicitudServicio>()
                 .HasOne(s => s.Cliente)
@@ -57,6 +62,8 @@ namespace VIANDRIVEFULL.Data
                 .HasForeignKey(s => s.VehiculoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+=======
+>>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
             // Configuración de precisión para la tarifa
             modelBuilder.Entity<PostulacionSolicitud>()
                 .Property(p => p.TarifaOfrecida)
