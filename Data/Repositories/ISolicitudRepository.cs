@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using VIANDRIVEFULL.Models;
 using VIANDRIVEFULL.Models.DTOs;
@@ -15,5 +15,9 @@ namespace VIANDRIVEFULL.Data.Repositories
         Task<bool> Registrar(SolicitudViajeDto dto);
         Task<List<SolicitudServicio>> ObtenerSolicitudesPorEstadoAsync(string estado);
         Task ActualizarAsync(SolicitudServicio solicitud);
+
+        // 👇 MÉTODOS AGREGADOS PARA SOPORTAR EL SERVICIO Y CONTROLADOR
+        Task<List<SolicitudServicio>> ObtenerPendientesAsync(int conductorId);
+        Task<bool> AceptarSolicitudAsync(int solicitudId, int conductorId);
     }
 }
