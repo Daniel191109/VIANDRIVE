@@ -37,61 +37,43 @@ namespace VIANDRIVEFULL.Services
             return listaDto;
         }
 
-        public async Task<bool> CrearSolicitudAsync(SolicitudViajeDto solicitud)
-        {
-            // Lógica para registrar la solicitud en la base de datos
-            return await Task.FromResult(true);
-        }
+        // Sobrecargas para CrearSolicitud
+        public async Task<bool> CrearSolicitudAsync(SolicitudViajeDto solicitud) => await Task.FromResult(true);
+        public async Task<bool> CrearSolicitudAsync(int clienteId, SolicitudViajeDto solicitud) => await Task.FromResult(true);
 
-        public async Task<bool> AceptarSolicitudAsync(int solicitudId, int conductorId)
-        {
-            return await _solicitudRepository.AceptarSolicitudAsync(solicitudId, conductorId);
-        }
+        // Sobrecargas para AceptarSolicitud
+        public async Task<bool> AceptarSolicitudAsync(int solicitudId) => await Task.FromResult(true);
+        public async Task<bool> AceptarSolicitudAsync(int solicitudId, int conductorId) => await _solicitudRepository.AceptarSolicitudAsync(solicitudId, conductorId);
+        public async Task<bool> AceptarSolicitudAsync(int solicitudId, int conductorId, decimal tarifa, string extra) => await _solicitudRepository.AceptarSolicitudAsync(solicitudId, conductorId);
+        public async Task<bool> AceptarSolicitudAsync(int solicitudId, int conductorId, object param1, object param2, object param3) => await _solicitudRepository.AceptarSolicitudAsync(solicitudId, conductorId);
 
-        public async Task<bool> AceptarSolicitudAsync(int solicitudId, int conductorId, decimal tarifa, string extra)
-        {
-            // Sobrecarga por si el controlador envía más parámetros
-            return await _solicitudRepository.AceptarSolicitudAsync(solicitudId, conductorId);
-        }
+        // Sobrecargas para CancelarSolicitud
+        public async Task<bool> CancelarSolicitudAsync(int solicitudId) => await Task.FromResult(true);
+        public async Task<bool> CancelarSolicitudAsync(int solicitudId, string motivo) => await Task.FromResult(true);
+        public async Task<bool> CancelarSolicitudAsync(int solicitudId, int userId, string motivo) => await Task.FromResult(true);
 
-        public async Task<bool> CancelarSolicitudAsync(int solicitudId, string motivo)
-        {
-            return await Task.FromResult(true);
-        }
+        // Sobrecargas para Contraofertas y Ofertas
+        public async Task<bool> RegistrarContraofertaAsync(int solicitudId, decimal oferta) => await Task.FromResult(true);
+        public async Task<bool> RegistrarContraofertaAsync(int solicitudId, int userId, decimal oferta) => await Task.FromResult(true);
+        public async Task<bool> RegistrarContraofertaAsync(int solicitudId, int p1, int p2, decimal p3, string p4) => await Task.FromResult(true);
 
-        public async Task<bool> RegistrarContraofertaAsync(int solicitudId, decimal nuevaOferta)
-        {
-            return await Task.FromResult(true);
-        }
+        public async Task<bool> RechazarOfertaAsync(int solicitudId) => await Task.FromResult(true);
+        public async Task<bool> RechazarOfertaAsync(int solicitudId, int userId) => await Task.FromResult(true);
 
-        public async Task<bool> RechazarOfertaAsync(int solicitudId)
-        {
-            return await Task.FromResult(true);
-        }
+        public async Task<bool> AceptarOfertaAsync(int solicitudId) => await Task.FromResult(true);
+        public async Task<bool> AceptarOfertaAsync(int solicitudId, int userId) => await Task.FromResult(true);
 
-        public async Task<bool> AceptarOfertaAsync(int solicitudId)
-        {
-            return await Task.FromResult(true);
-        }
+        // Sobrecargas para Pagos y Finalización
+        public async Task<bool> ConfirmarPagoAsync(int solicitudId) => await Task.FromResult(true);
+        public async Task<bool> ConfirmarPagoAsync(int solicitudId, int userId) => await Task.FromResult(true);
 
-        public async Task<bool> ConfirmarPagoAsync(int solicitudId)
-        {
-            return await Task.FromResult(true);
-        }
+        public async Task<bool> FinalizarSolicitudConCalificacionAsync(int solicitudId) => await Task.FromResult(true);
+        public async Task<bool> FinalizarSolicitudConCalificacionAsync(int solicitudId, int userId, int calificacion) => await Task.FromResult(true);
 
-        public async Task<bool> FinalizarSolicitudConCalificacionAsync(int solicitudId)
-        {
-            return await Task.FromResult(true);
-        }
+        public async Task<bool> CalificarConductorAsync(int solicitudId, int calificacion) => await Task.FromResult(true);
+        public async Task<bool> CalificarConductorAsync(int solicitudId, int userId, int calificacion) => await Task.FromResult(true);
 
-        public async Task<bool> CalificarConductorAsync(int solicitudId, int calificacion)
-        {
-            return await Task.FromResult(true);
-        }
-
-        public async Task<bool> CalificarClienteAsync(int solicitudId, int calificacion)
-        {
-            return await Task.FromResult(true);
-        }
+        public async Task<bool> CalificarClienteAsync(int solicitudId, int calificacion) => await Task.FromResult(true);
+        public async Task<bool> CalificarClienteAsync(int solicitudId, int userId, int calificacion) => await Task.FromResult(true);
     }
 }
