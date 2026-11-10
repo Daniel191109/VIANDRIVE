@@ -26,7 +26,6 @@ builder.Services.Configure<FormOptions>(options =>
 // 2. CONFIGURACIÓN DE BASE DE DATOS Y SERVICIOS
 // ==========================================
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-<<<<<<< HEAD
 if (string.IsNullOrWhiteSpace(connectionString))
     throw new InvalidOperationException("Configura ConnectionStrings__DefaultConnection en el servidor.");
 
@@ -39,8 +38,6 @@ var jwtAudience = builder.Configuration["Jwt:Audience"];
 if (string.IsNullOrWhiteSpace(jwtIssuer) || string.IsNullOrWhiteSpace(jwtAudience))
     throw new InvalidOperationException("Configura Jwt__Issuer y Jwt__Audience en el servidor.");
 
-=======
->>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString, sqlServerOptions =>
     {
@@ -71,16 +68,9 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-<<<<<<< HEAD
         ValidIssuer = jwtIssuer,
         ValidAudience = jwtAudience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-=======
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
->>>>>>> 8be03561b27d6ea1f119228c3c0891f11b09dc72
     };
 });
 
@@ -99,7 +89,6 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "VIANDRIVE API v1");
-    // Al quitar RoutePrefix = string.Empty, Swagger estará disponible en: https://tu-dominio/swagger
 });
 
 if (!app.Environment.IsDevelopment())
